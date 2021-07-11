@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "817197472058",
+    "project_id": "placesaver-8dad3",
+    "storage_bucket": "placesaver-8dad3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817197472058:android:3e74848419ced77f581803",
+        "android_client_info": {
+          "package_name": "com.morgenmiddag.placesaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817197472058-cpi1gs5b22cedi9jnd5ibdr0ititn63d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiZbhFOU-ikyUumCDEQcde9_Yr1s2SmmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817197472058-cpi1gs5b22cedi9jnd5ibdr0ititn63d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:817197472058:android:ace3e6167521e92d581803",
+        "android_client_info": {
+          "package_name": "com.placesaver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "817197472058-cpi1gs5b22cedi9jnd5ibdr0ititn63d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiZbhFOU-ikyUumCDEQcde9_Yr1s2SmmY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "817197472058-cpi1gs5b22cedi9jnd5ibdr0ititn63d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
