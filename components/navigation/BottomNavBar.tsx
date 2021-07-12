@@ -10,8 +10,8 @@ const PlacesRoute = () => <PlacesList />;
 const BottomNavBar = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
-    {key: 'map', title: 'Map', icon: 'explore'},
-    {key: 'places', title: 'Places', icon: 'explore'},
+    {key: 'map', title: 'Map', icon: 'map'},
+    {key: 'places', title: 'Places', icon: 'format-list-bulleted'},
   ]);
 
   const renderScene = BottomNavigation.SceneMap({

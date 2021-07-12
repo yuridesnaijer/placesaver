@@ -62,7 +62,7 @@ const ButtonSaveLocation = () => {
       <FAB
         style={styles.fab}
         small
-        icon="add_location_alt"
+        icon="map-marker-plus"
         onPress={() => toggleDialog()}
       />
       <Portal>
