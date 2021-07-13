@@ -1,22 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {Appbar} from 'react-native-paper';
 import BottomNavBar from './components/navigation/BottomNavBar';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {Button} from 'react-native';
 import AuthContainer from './containers/AuthContainer';
+import {AuthContext} from './context/AuthContext';
 
 const App = () => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState<FirebaseAuthTypes.User>();
+  const {activeUser, setActiveUser} = useContext(AuthContext);
 
   // Handle user state changes
   function onAuthStateChanged(
     user: FirebaseAuthTypes.User | null | FirebaseAuthTypes.UserCredential,
   ) {
-    console.log('setting user', user);
-
-    setUser(user as FirebaseAuthTypes.User);
+    setActiveUser(user as FirebaseAuthTypes.User);
     if (initializing) setInitializing(false);
   }
 
@@ -27,7 +26,7 @@ const App = () => {
 
   if (initializing) return null;
 
-  if (!user) {
+  if (!activeUser) {
     return <AuthContainer />;
   }
 

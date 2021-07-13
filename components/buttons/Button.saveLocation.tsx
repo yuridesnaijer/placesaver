@@ -1,5 +1,5 @@
 import {PermissionsAndroid, StyleSheet} from 'react-native';
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Geolocation from 'react-native-geolocation-service';
 import {
   Button,
@@ -10,6 +10,7 @@ import {
   TextInput,
 } from 'react-native-paper';
 import useDatabase from '../../hooks/useDatabase';
+import {AuthContext} from '../../context/AuthContext';
 
 const requestGeoLocationPermission = async () => {
   try {
