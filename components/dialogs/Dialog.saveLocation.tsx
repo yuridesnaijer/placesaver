@@ -1,5 +1,6 @@
+import React, {useState} from 'react';
 import {Button, Chip, Dialog, Paragraph, TextInput} from 'react-native-paper';
-import React, {useState, useReducer, useEffect} from 'react';
+import {launchCamera} from 'react-native-image-picker';
 import {PermissionsAndroid, View} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {requestGeoLocationPermission} from '../buttons/Button.saveLocation';
@@ -52,6 +53,9 @@ const DialogSaveLocation: React.FC<Props> = props => {
           },
           {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
         );
+
+        // Clear the input
+        setPlaceName('');
       }
     });
   };
@@ -66,6 +70,21 @@ const DialogSaveLocation: React.FC<Props> = props => {
           value={placeName}
           onChangeText={text => setPlaceName(text)}
         />
+
+        <Button
+          onPress={() =>
+            launchCamera(
+              {
+                cameraType: 'front',
+                mediaType: 'photo',
+              },
+              response => {
+                console.log(response);
+              },
+            )
+          }>
+          Add Photo
+        </Button>
         <Paragraph>Tags:</Paragraph>
         <View>
           {tags.map(tag => {
