@@ -1,18 +1,9 @@
 import {PermissionsAndroid, StyleSheet} from 'react-native';
-import React, {useContext, useState} from 'react';
-import Geolocation from 'react-native-geolocation-service';
-import {
-  Button,
-  Dialog,
-  FAB,
-  Paragraph,
-  Portal,
-  TextInput,
-} from 'react-native-paper';
-import useDatabase from '../../hooks/useDatabase';
-import {AuthContext} from '../../context/AuthContext';
+import React, {useState} from 'react';
+import {FAB} from 'react-native-paper';
+import DialogSaveLocation from '../dialogs/Dialog.saveLocation';
 
-const requestGeoLocationPermission = async () => {
+export const requestGeoLocationPermission = async () => {
   try {
     return await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
@@ -32,30 +23,10 @@ const requestGeoLocationPermission = async () => {
 };
 
 const ButtonSaveLocation = () => {
-  const {addPlace} = useDatabase();
-  const [placeName, setPlaceName] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const toggleDialog = () => {
     setIsDialogOpen(!isDialogOpen);
-  };
-
-  const saveCurrentLocation = () => {
-    requestGeoLocationPermission().then(result => {
-      if (result === PermissionsAndroid.RESULTS.GRANTED) {
-        Geolocation.getCurrentPosition(
-          location => {
-            addPlace({location, placeName});
-            toggleDialog();
-          },
-          error => {
-            // See error code charts below.
-            console.log(error.code, error.message);
-          },
-          {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
-        );
-      }
-    });
   };
 
   return (
@@ -66,22 +37,10 @@ const ButtonSaveLocation = () => {
         icon="map-marker-plus"
         onPress={() => toggleDialog()}
       />
-      <Portal>
-        <Dialog visible={isDialogOpen} onDismiss={toggleDialog}>
-          <Dialog.Title>Save this place!</Dialog.Title>
-          <Dialog.Content>
-            <Paragraph>This is simple dialog</Paragraph>
-            <TextInput
-              label="Place name"
-              value={placeName}
-              onChangeText={text => setPlaceName(text)}
-            />
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={saveCurrentLocation}>Done</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
+      <DialogSaveLocation
+        isDialogOpen={isDialogOpen}
+        onDismiss={toggleDialog}
+      />
     </>
   );
 };

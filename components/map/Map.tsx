@@ -1,24 +1,10 @@
 import MapView from 'react-native-maps';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {StyleSheet} from 'react-native';
-import Geolocation, {GeoPosition} from 'react-native-geolocation-service';
+import useLocation from '../../hooks/useLocation';
 
 const Map = () => {
-  const [location, setLocation] = useState<GeoPosition>();
-
-  Geolocation.watchPosition(
-    success => {
-      setLocation(success);
-    },
-    error => console.error(error),
-    {
-      interval: 1000,
-    },
-  );
-
-  useEffect(() => {
-    console.log('location', location);
-  }, [location]);
+  const {location} = useLocation();
 
   if (!location) {
     return null; //TODO: show loading spinner

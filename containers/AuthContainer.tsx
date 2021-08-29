@@ -25,9 +25,13 @@ const styles = StyleSheet.create({
   formControl: {
     marginBottom: 25,
   },
-  button: {
+  signInButton: {
     color: 'white',
     backgroundColor: 'blue',
+  },
+  createAccountButton: {
+    color: 'white',
+    backgroundColor: 'white',
   },
   view: {
     flex: 1,
@@ -66,7 +70,31 @@ const AuthContainer = () => {
       <Button
         mode="contained"
         dark={true}
-        style={[styles.formControl, styles.button]}
+        style={[styles.formControl, styles.signInButton]}
+        onPress={() => {
+          auth()
+            .signInWithEmailAndPassword(email, password)
+            .then(res => {
+              console.log('User account created & signed in!', res);
+            })
+            .catch(error => {
+              if (error.code === 'auth/email-already-in-use') {
+                console.log('That email address is already in use!');
+              }
+
+              if (error.code === 'auth/invalid-email') {
+                console.log('That email address is invalid!');
+              }
+
+              console.error(error);
+            });
+        }}>
+        Sign-In
+      </Button>
+      <Button
+        mode="contained"
+        dark={false}
+        style={[styles.formControl, styles.createAccountButton]}
         onPress={() => {
           auth()
             .createUserWithEmailAndPassword(email, password)
@@ -85,7 +113,7 @@ const AuthContainer = () => {
               console.error(error);
             });
         }}>
-        Sign-In/create account
+        create account
       </Button>
     </View>
   );

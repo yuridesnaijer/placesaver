@@ -1,14 +1,6 @@
 import * as React from 'react';
-import {
-  List,
-  ActivityIndicator,
-  Colors,
-  Portal,
-  Modal,
-  Text,
-  Provider,
-} from 'react-native-paper';
-import {useContext, useEffect, useState} from 'react';
+import {ActivityIndicator, Colors, Portal, Provider} from 'react-native-paper';
+import {useState} from 'react';
 import useDatabase from '../../hooks/useDatabase';
 import IPlace from '../../types/interfaces/IPlace';
 import {ScrollView} from 'react-native';
@@ -16,34 +8,9 @@ import PlacesListItem from './PlacesListItem';
 import ModalPlaceDetails from '../modal/Modal.placeDetails';
 
 const PlacesList = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const {placesCollection} = useDatabase();
-  const [places, setPlaces] = useState<Array<IPlace>>();
+  const {isLoading, places} = useDatabase();
   const [placeDetails, setPlaceDetails] = useState<IPlace>();
   const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    setIsLoading(true);
-    placesCollection.onSnapshot(querySnapshot => {
-      const list: Array<IPlace> = [];
-
-      querySnapshot.forEach(doc => {
-        const {location, placeName} = doc.data();
-
-        list.push({
-          id: doc.id,
-          location,
-          placeName,
-        });
-      });
-
-      setPlaces(list);
-
-      if (isLoading) {
-        setIsLoading(false);
-      }
-    });
-  }, []);
 
   const showModal = (place: IPlace) => {
     setPlaceDetails(place);
