@@ -9,17 +9,12 @@ interface Props {
   onClick: (...args: any) => void;
 }
 
-const LeftContent = props => <Avatar.Icon {...props} icon="pin" />;
+const LeftContent = (props: Props) => <Avatar.Icon {...props} icon="pin" />;
 
 const PlacesListItem: React.FC<Props> = props => {
   const {place, onClick} = props;
 
   const {distance} = useDistance(place.location.coords);
-
-  const tags = place.tags?.map(tag => (
-    // @ts-ignore
-    <Chip key={tag} icon={tagIcons[tag]} />
-  ));
 
   return (
     <Card style={styles.card} mode="elevated">
@@ -29,7 +24,12 @@ const PlacesListItem: React.FC<Props> = props => {
         left={LeftContent}
       />
       <Card.Cover source={{uri: place.imageData?.uri}} />
-      <Card.Content style={styles.tagContainer}>{tags}</Card.Content>
+      <Card.Content style={styles.tagContainer}>
+        {place.tags?.map(tag => (
+          // @ts-ignore
+          <Chip key={tag} icon={tagIcons[tag]} />
+        ))}
+      </Card.Content>
       <Card.Actions>
         <FAB icon="navigation" onPress={onClick} />
       </Card.Actions>
