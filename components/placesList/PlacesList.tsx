@@ -8,9 +8,11 @@ import PlacesListItem from './PlacesListItem';
 import ModalPlaceDetails from '../modal/Modal.placeDetails';
 
 const PlacesList = () => {
-  const {isLoading, places} = useDatabase();
+  const {places, isLoading} = useDatabase();
   const [placeDetails, setPlaceDetails] = useState<IPlace>();
   const [visible, setVisible] = useState(false);
+
+  console.log('places', places);
 
   const showModal = (place: IPlace) => {
     setPlaceDetails(place);

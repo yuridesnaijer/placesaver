@@ -28,7 +28,7 @@ const PlacesListItem: React.FC<Props> = props => {
         subtitle={`${distance && distance / 1000}km`}
         left={LeftContent}
       />
-      <Card.Cover source={{uri: 'https://picsum.photos/700'}} />
+      <Card.Cover source={{uri: place.imageData?.uri}} />
       <Card.Content style={styles.tagContainer}>{tags}</Card.Content>
       <Card.Actions>
         <FAB icon="navigation" onPress={onClick} />

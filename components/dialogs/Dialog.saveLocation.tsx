@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, Chip, Dialog, Paragraph, TextInput} from 'react-native-paper';
-import {launchCamera} from 'react-native-image-picker';
-import {PermissionsAndroid, View} from 'react-native';
+import {Asset, launchCamera} from 'react-native-image-picker';
+import {Image, PermissionsAndroid, View, StyleSheet} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import {requestGeoLocationPermission} from '../buttons/Button.saveLocation';
 import useDatabase from '../../hooks/useDatabase';
@@ -23,7 +23,8 @@ const DialogSaveLocation: React.FC<Props> = props => {
   const {isDialogOpen, onDismiss} = props;
 
   const {addPlace} = useDatabase();
-  const [placeName, setPlaceName] = useState('');
+  const [placeName, setPlaceName] = useState<string>('');
+  const [placePhoto, setPlacePhoto] = useState<Asset>();
   const [enabledTags, setEnabledTags] = useState<string[]>([]);
 
   const toggleTag = (value: string) => {
@@ -44,7 +45,12 @@ const DialogSaveLocation: React.FC<Props> = props => {
       if (result === PermissionsAndroid.RESULTS.GRANTED) {
         Geolocation.getCurrentPosition(
           location => {
-            addPlace({location, placeName, tags: enabledTags});
+            addPlace({
+              location,
+              placeName,
+              tags: enabledTags,
+              imageData: placePhoto,
+            });
             onDismiss();
           },
           error => {
@@ -56,6 +62,7 @@ const DialogSaveLocation: React.FC<Props> = props => {
 
         // Clear the input
         setPlaceName('');
+        setPlacePhoto(undefined);
       }
     });
   };
@@ -71,20 +78,27 @@ const DialogSaveLocation: React.FC<Props> = props => {
           onChangeText={text => setPlaceName(text)}
         />
 
-        <Button
-          onPress={() =>
-            launchCamera(
-              {
-                cameraType: 'front',
-                mediaType: 'photo',
-              },
-              response => {
-                console.log(response);
-              },
-            )
-          }>
-          Add Photo
-        </Button>
+        {!placePhoto && (
+          <Button
+            onPress={() =>
+              launchCamera(
+                {
+                  cameraType: 'front',
+                  mediaType: 'photo',
+                },
+                response => {
+                  if (response.assets) {
+                    setPlacePhoto(response.assets[0]);
+                  }
+                },
+              )
+            }>
+            Add Photo
+          </Button>
+        )}
+        {placePhoto && (
+          <Image style={styles.image} source={{uri: placePhoto.uri}} />
+        )}
         <Paragraph>Tags:</Paragraph>
         <View>
           {tags.map(tag => {
@@ -107,5 +121,13 @@ const DialogSaveLocation: React.FC<Props> = props => {
     </Dialog>
   );
 };
+
+const styles = StyleSheet.create({
+  image: {
+    width: 128,
+    height: 128,
+    marginTop: 8,
+  },
+});
 
 export default DialogSaveLocation;

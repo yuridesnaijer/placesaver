@@ -1,50 +1,63 @@
-import firestore from '@react-native-firebase/firestore';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import IPlace from '../types/interfaces/IPlace';
-import {useContext, useEffect, useState} from 'react';
-import {AuthContext} from '../context/AuthContext';
+import {useEffect, useState} from 'react';
+
+/**
+ * DB example:
+ *
+ * {
+ *     placesList: [IPlace, IPlace]
+ * }
+ */
 
 const useDatabase = () => {
-  const {activeUser} = useContext(AuthContext);
-  const placesCollection = firestore().collection('places');
   const [isLoading, setIsLoading] = useState(true);
-  const [places, setPlaces] = useState<Array<IPlace>>();
+  const [places, setPlaces] = useState<Array<IPlace>>([]);
 
   useEffect(() => {
-    setIsLoading(true);
-    const list: Array<IPlace> = [];
-
-    placesCollection
-      .where('userId', '==', activeUser?.uid)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          const {location, placeName, userId, tags} = doc.data();
-
-          list.push({
-            id: doc.id,
-            userId,
-            location,
-            placeName,
-            tags,
-          });
-        });
-
-        setPlaces(list);
-
-        if (isLoading) {
-          setIsLoading(false);
-        }
-      });
+    // AsyncStorage.clear();
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      await getPlaces();
+    })();
+  }, []);
+
+  const getPlaces = async (): Promise<IPlace[]> => {
+    setIsLoading(true);
+
+    try {
+      const jsonValue = await AsyncStorage.getItem('@placeSaver_data');
+      if (jsonValue) {
+        const placesList = JSON.parse(jsonValue).placesList;
+        setPlaces(placesList);
+        setIsLoading(false);
+        return placesList;
+      }
+    } catch (e) {
+      // error reading value
+      console.log(e);
+    }
+    setIsLoading(false);
+    return [];
+  };
+
   const addPlace = async (place: IPlace) => {
-    if (activeUser) {
-      return placesCollection.add({...place, userId: activeUser.uid});
+    try {
+      const existingPlaces = await getPlaces();
+      const db = {placesList: [place, ...existingPlaces]};
+      const jsonValue = JSON.stringify(db);
+      await AsyncStorage.setItem('@placeSaver_data', jsonValue);
+    } catch (e) {
+      // saving error
+      console.log(e);
     }
   };
 
   return {
     addPlace,
+    getPlaces,
     places,
     isLoading,
   };
